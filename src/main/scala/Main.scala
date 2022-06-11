@@ -1,17 +1,10 @@
-import _root_.io.circe._
-import _root_.org.http4s.ember.server.EmberServerBuilder
 import cats.effect._
-import cats.syntax.all._
 import com.comcast.ip4s._
-import fs2._
 import org.http4s._
-import org.http4s.circe._
-import org.http4s.dsl.Http4sDsl
 import org.http4s.dsl.io._
+import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.implicits._
 import org.http4s.server.middleware.Logger
-import org.http4s.server.websocket.WebSocketBuilder
-import org.http4s.websocket.WebSocketFrame
 
 object Main extends IOApp {
 
@@ -35,7 +28,7 @@ object Main extends IOApp {
           .withHost(host)
           .withPort(port)
           .withHttpApp(finalHttpApp)
-//          .withHttpWebSocketApp(service[IO])
+          //          .withHttpWebSocketApp(service[IO])
           .build
     } yield server
   }.use(server =>
