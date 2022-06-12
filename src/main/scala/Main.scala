@@ -22,16 +22,16 @@ object Main extends IOApp {
     val host = host"0.0.0.0"
     val port = port"8989"
 
-    //    val app = HttpRoutes.of[IO] {
-    //      case GET -> Root / "hello" / name =>
-    //        Ok(s"Hello, $name.")
-    //    }.orNotFound
-    //
-    //    // With Middlewares in place
-    //    val finalHttpApp = Logger.httpApp(true, true)(app)
-
     for {
-      // Server Level Resources Here
+      app = HttpRoutes.of[IO] {
+      case GET -> Root / "hello" / name =>
+      Ok (s"Hello, $name.")
+    } .orNotFound
+
+      // With Middlewares in place
+      finalHttpApp = Logger.httpApp(true, true) (app)
+
+    // Server Level Resources Here
       server <-
         EmberServerBuilder
           .default[IO]
