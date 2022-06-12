@@ -77,10 +77,16 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % 
 // documentation at http://www.scala-sbt.org/documentation.html
 val http4sVersion = "0.23.12"
 resolvers += Resolver.sonatypeRepo("snapshots")
-
 libraryDependencies ++= Seq(
-  "org.http4s" %% "http4s-dsl" % http4sVersion,
-  "org.http4s" %% "http4s-ember-server" % http4sVersion,
-  "org.http4s" %% "http4s-ember-client" % http4sVersion,
-  "org.http4s" %% "http4s-circe" % http4sVersion,
-)
+  "org.http4s" %% "http4s-dsl",
+  "org.http4s" %% "http4s-ember-server",
+  "org.http4s" %% "http4s-ember-client",
+  "org.http4s" %% "http4s-circe",
+).map(_ % http4sVersion)
+
+val circeVersion = "0.14.1"
+libraryDependencies ++= Seq(
+  "io.circe" %% "circe-core",
+  "io.circe" %% "circe-generic",
+  "io.circe" %% "circe-parser"
+).map(_ % circeVersion)

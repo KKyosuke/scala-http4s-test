@@ -1,3 +1,5 @@
+package server
+
 import cats.effect._
 import cats.syntax.all._
 import com.comcast.ip4s._
@@ -11,24 +13,24 @@ import org.http4s.dsl.io._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.implicits._
-import org.http4s.server.middleware.Logger
+//import org.http4s.server.middleware.Logger
 import org.http4s.server.websocket.WebSocketBuilder2
 import org.http4s.websocket.WebSocketFrame
 import scala.concurrent.duration._
 
-object Main extends IOApp {
+object EmberServerSimpleExample extends IOApp {
 
   def run(args: List[String]) = {
     val host = host"0.0.0.0"
     val port = port"8989"
 
-    //    val app = HttpRoutes.of[IO] {
-    //      case GET -> Root / "hello" / name =>
-    //        Ok(s"Hello, $name.")
-    //    }.orNotFound
-    //
-    //    // With Middlewares in place
-    //    val finalHttpApp = Logger.httpApp(true, true)(app)
+    val app = HttpRoutes.of[IO] {
+      case GET -> Root / "hello" / name =>
+        Ok(s"Hello, $name.")
+    }.orNotFound
+
+    //// With Middlewares in place
+    // val finalHttpApp = Logger.httpApp(true, true)(app)
 
     for {
       // Server Level Resources Here
@@ -37,7 +39,7 @@ object Main extends IOApp {
           .default[IO]
           .withHost(host)
           .withPort(port)
-          //          .withHttpApp(finalHttpApp)
+          // .withHttpApp(finalHttpApp)
           .withHttpWebSocketApp(service[IO])
           .build
     } yield server
@@ -46,13 +48,13 @@ object Main extends IOApp {
       IO.never.as(ExitCode.Success)
   )
 
-  def service[F[_] : Async](wsb: WebSocketBuilder2[F]): HttpApp[F] = {
+  def service[F[_]: Async](wsb: WebSocketBuilder2[F]): HttpApp[F] = {
     val dsl = new Http4sDsl[F] {}
     import dsl._
 
     HttpRoutes
       .of[F] {
-        case req@POST -> Root =>
+        case req @ POST -> Root =>
           for {
             json <- req.decodeJson[Json]
             resp <- Ok(json)
