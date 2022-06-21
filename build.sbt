@@ -75,7 +75,7 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % 
 
 // To learn more about multi-project builds, head over to the official sbt
 // documentation at http://www.scala-sbt.org/documentation.html
-val http4sVersion = "0.23.12"
+val http4sVersion = "1.0.0-M33"
 resolvers += Resolver.sonatypeRepo("snapshots")
 libraryDependencies ++= Seq(
   "org.http4s" %% "http4s-dsl",
@@ -90,3 +90,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic",
   "io.circe" %% "circe-parser"
 ).map(_ % circeVersion)
+
+libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.1.0"
+libraryDependencies += "org.apache.kafka" % "kafka_2.10" % "0.10.2.2"
+//libraryDependencies += "io.confluent" % "kafka-avro-serializer" % "6.0.0"
+
