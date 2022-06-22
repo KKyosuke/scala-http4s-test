@@ -35,11 +35,11 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
 
-  cli:
-    image: confluentinc/cp-kafka:5.5.1
-    hostname: cli
-    container_name: cli
-    depends_on:
-      - broker
-    entrypoint: /bin/sh
-    tty: true
+#  cli:
+#    image: confluentinc/cp-kafka:5.5.1
+#    hostname: cli
+#    container_name: cli
+#    depends_on:
+#      - broker
+#    entrypoint: /bin/sh
+#    tty: true

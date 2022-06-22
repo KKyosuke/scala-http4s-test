@@ -11,6 +11,7 @@
 <button type="button" id="startButton">開始</button>
 <button type="button" id="sendText">テキスト送信</button>
 <button type="button" id="sendPing">PING送信</button>
+<button type="button" id="publish">publish</button>
 <div>
     <ul id="listItem">
     </ul>
@@ -22,16 +23,23 @@
         document.getElementById('startButton').addEventListener('click', function (e) {
             sock = new WebSocket('ws://localhost:8989/ws');
             // 接続
+            let starttime = 0;
+            let endtime = 0;
             sock?.addEventListener('open', function (e) {
-                console.log('Socket 接続成功');
+                starttime = Date.now()
+                const item = document.createElement("li");
+                item.innerHTML = `Socket 接続成功 [time:${starttime}ms]`;
+                document.getElementById("listItem").append(item);
+                console.log(e.data);
             });
 
             // サーバーからデータを受け取る
             sock?.addEventListener('message', function (e) {
                 const item = document.createElement("li");
-                item.innerHTML = e.data;
+                item.innerHTML = `${e.data} [time:${Date.now()}ms]`;
                 document.getElementById("listItem").append(item);
                 console.log(e.data);
+                sock?.send('');
             });
 
             // サーバーにデータを送る
@@ -42,6 +50,26 @@
             // サーバーにデータを送る
             document.getElementById('sendPing').addEventListener('click', function (e) {
                 sock?.ping();
+            });
+
+            // サーバーにデータを送る
+            document.getElementById('publish').addEventListener('click', function (e) {
+                fetch('http://localhost:8989/kafka/publish/messaging')
+            });
+
+            sock?.addEventListener('close', function (e) {
+                endtime = Date.now()
+                const item = document.createElement("li");
+                item.innerHTML = `Disconnected!! [time:${Date.now()}ms]`;
+                document.getElementById("listItem").append(item);
+                console.log(e.data);
+
+                const item2 = document.createElement("li");
+                item2.innerHTML = `sum [time:${endtime - starttime}ms]`;
+                document.getElementById("listItem").append(item2);
+                console.log(e.data);
+
+                // document.getElementById('startButton').click();
             });
         });
     });
